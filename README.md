@@ -129,6 +129,14 @@ Works the same with any MCP client (Claude Code, Cursor, Windsurf, ...).
 | `enum` | array | — | Allowed string values |
 | `default` | string | — | Used when the agent omits the param |
 
+## Docker
+
+```bash
+docker build -t config2mcp .
+# mount your own config over the bundled safe default
+docker run -i --rm -v $PWD/tools.yaml:/config/tools.yaml:ro config2mcp
+```
+
 ## Trying it safely
 
 Want to see exactly what an agent could run before granting anything?

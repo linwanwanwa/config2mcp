@@ -1,0 +1,25 @@
+# Demo config for DSH integration test: safe, read-only file tools.
+prefix: files
+tools:
+  - name: list
+    description: List files in a directory (read-only, safe).
+    command: ls
+    args: ["-la"]
+    params:
+      - name: dir
+        positional: true
+        type: string
+        required: true
+        description: Absolute directory path.
+    timeoutMs: 10000
+
+  - name: info
+    description: Show disk usage of a path.
+    command: du
+    args: ["-sh"]
+    params:
+      - name: path
+        positional: true
+        type: string
+        required: true
+    timeoutMs: 15000
