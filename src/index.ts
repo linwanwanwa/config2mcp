@@ -42,12 +42,55 @@ function usage(): never {
   process.exit(2);
 }
 
+/** Candidates checked when running as a server with no explicit config. */
+function autoDiscoverConfig(): { path: string | null; config: ReturnType<typeof parseConfig> } {
+  const env = process.env.CONFIG2MCP_CONFIG;
+  const candidates = [
+    ...(env ? [env] : []),
+    "tools.yaml",
+    "tools.yml",
+    "config2mcp.yaml",
+    "config2mcp.yml",
+  ];
+  for (const p of candidates) {
+    try {
+      return { path: p, config: parseConfig(readFileSync(p, "utf8")) };
+    } catch (e) {
+      if (e instanceof ConfigError) {
+        // a candidate exists but is invalid — surface the error loudly
+        console.error(`config2mcp: invalid config in ${p}: ${e.message}`);
+        process.exit(1);
+      }
+      // missing file — try next candidate
+    }
+  }
+  return { path: null, config: parseConfig("tools: []") };
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   const dryRun = argv.includes("--dry-run");
   const positional = argv.filter(a => !a.startsWith("--"));
   const [cmd, configPath] = positional;
-  if (!cmd || !configPath) usage();
+
+  // No subcommand: run as a server (MCP convention — e.g. `npx config2mcp` or
+  // being spawned directly by a proxy/orchestrator like Glama's mcp-proxy).
+  // Config is auto-discovered; with no config found we serve zero tools and
+  // explain how to add some, instead of exiting.
+  if (!cmd) {
+    const { path, config } = autoDiscoverConfig();
+    if (!path) {
+      console.error(
+        "config2mcp: no config found (looked at $CONFIG2MCP_CONFIG, ./tools.yaml, ./config2mcp.yaml). " +
+        "Serving zero tools. Pass a config file or set CONFIG2MCP_CONFIG.",
+      );
+    } else {
+      console.error(`config2mcp: serving from ${path}`);
+    }
+    await runStdio(config, { env: config.env, dryRun });
+    return;
+  }
+
 
   switch (cmd) {
     case "serve": {

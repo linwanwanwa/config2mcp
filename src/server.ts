@@ -83,9 +83,33 @@ export interface CreateServerOptions {
 /** Build an McpServer from a validated config. Exposed for tests. */
 export function createServer(cfg: Cli2McpConfig, opts: CreateServerOptions = {}): McpServer {
   const server = new McpServer(
-    { name: "config2mcp", version: "0.1.0" },
+    { name: "config2mcp", version: "0.1.1" },
     { capabilities: { tools: {} } },
   );
+
+  if (cfg.tools.length === 0) {
+    // Zero tools configured (e.g. bare `config2mcp` server mode with no
+    // config found). Register a single meta tool so the server is fully
+    // functional over MCP and tells the caller how to add real tools.
+    server.tool(
+      "config2mcp_help",
+      "This config2mcp server has no tools configured yet. Call this to learn how to add CLI tools.",
+      async (): Promise<CallToolResult> => ({
+        content: [{
+          type: "text",
+          text:
+            "config2mcp exposes CLI tools described in a YAML config.\n\n" +
+            "To add tools:\n" +
+            "  1. Write a config file (see https://github.com/linwanwanwa/config2mcp#config-reference)\n" +
+            "  2. Restart with: config2mcp serve <config.yaml>\n" +
+            "     or set CONFIG2MCP_CONFIG=<path> and run bare \"config2mcp\"\n\n" +
+            "Auto-discovery looks at: $CONFIG2MCP_CONFIG, ./tools.yaml, ./config2mcp.yaml",
+        }],
+        isError: false,
+      }),
+    );
+    return server;
+  }
 
   for (const spec of cfg.tools) {
     const name = prefixedName(cfg, spec);

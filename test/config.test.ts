@@ -101,3 +101,8 @@ tools:
 `);
   assert.deepEqual(cfg.tools[0].params[0].enum, ["json", "table"]);
 });
+
+test("empty tools array is valid (auto-discovery server mode)", () => {
+  const cfg = parseConfig("tools: []");
+  assert.deepEqual(cfg.tools, []);
+});

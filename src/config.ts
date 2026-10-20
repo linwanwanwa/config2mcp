@@ -64,7 +64,7 @@ export const configSchema = z.object({
   /** Tool namespace prefix, e.g. "ffmpeg" → tools named "ffmpeg_probe". */
   prefix: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
   env: z.record(z.string()).optional(),
-  tools: z.array(toolSchema).min(1),
+  tools: z.array(toolSchema), // may be empty in auto-discovery server mode
 });
 
 export type Param = z.infer<typeof paramSchema>;

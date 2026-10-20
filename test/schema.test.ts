@@ -35,3 +35,10 @@ tools:
   const schema = buildInputSchema(cfg.tools[0]);
   assert.ok(schema.properties.path.description!.length > 0);
 });
+
+test("createServer with zero tools constructs without error", async () => {
+  const { createServer } = await import("../src/server.js");
+  const { parseConfig } = await import("../src/config.js");
+  const server = createServer(parseConfig("tools: []"));
+  assert.ok(server, "server instance created for empty config");
+});

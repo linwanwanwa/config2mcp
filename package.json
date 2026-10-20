@@ -1,7 +1,7 @@
 {
   "name": "config2mcp",
-  "version": "0.1.0",
-  "description": "Turn any CLI tool into an MCP server from one YAML config file. Zero code, no shell injection, bounded execution. Declarative, reviewable, safe.",
+  "version": "0.1.1",
+  "description": "Turn any CLI tool into an MCP server from one YAML config. Zero code, no shell injection, bounded execution. Runs bare (auto-discovers config) or with an explicit file.",
   "type": "module",
   "bin": {
     "config2mcp": "dist/index.js"
