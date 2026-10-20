@@ -1,6 +1,6 @@
 # config2mcp
 
-[![CI](https://github.com/linwanwanwa/config2mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/<你的用户名>/config2mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/linwanwanwa/config2mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/linwanwanwa/config2mcp/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/config2mcp)](https://www.npmjs.com/package/config2mcp)
 
 **Turn any CLI tool into an MCP server. One YAML file. Zero code.**
