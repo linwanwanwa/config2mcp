@@ -74,6 +74,23 @@ npx config2mcp inspect ./echo.yaml
 npx config2mcp validate ./echo.yaml
 ```
 
+### One-prompt install (let your AI set it up)
+
+Copy the block below, paste it to Claude / Cursor / DSH / any MCP-capable
+agent, and it will set everything up for you — package, config, and client
+registration. Just tell it which CLI tools you want to expose.
+
+```text
+Install the MCP server "config2mcp" for me. Steps:
+1. Create a tools config file at ~/.config2mcp/tools.yaml that exposes these CLI tools: <list your commands here, e.g. ffmpeg for media conversion, git for repo status>
+2. For each tool write: name (snake_case), a one-line description, the command, its args, and typed params (flag / positional / boolean with trueFlag).
+3. Config format reference: https://github.com/linwanwanwa/config2mcp#config-reference — only commands declared in the YAML are reachable (allow-list), keep it read-only if unsure.
+4. Validate with: npx -y config2mcp validate ~/.config2mcp/tools.yaml
+5. Register the server with your own MCP client config as:
+   npx -y config2mcp serve ~/.config2mcp/tools.yaml
+6. Tell me which tools got registered and how to test one.
+```
+
 ### Connect to Claude Desktop
 
 Add to `claude_desktop_config.json`:
