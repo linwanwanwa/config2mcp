@@ -1,0 +1,50 @@
+{
+  "name": "config2mcp",
+  "version": "0.1.0",
+  "description": "Turn any CLI tool into an MCP server from one YAML config file. Zero code, no shell injection, bounded execution. Declarative, reviewable, safe.",
+  "type": "module",
+  "bin": {
+    "config2mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test": "node scripts/run-tests.mjs",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "cli",
+    "yaml",
+    "config",
+    "agent",
+    "claude",
+    "cursor",
+    "windsurf",
+    "cli2mcp",
+    "wrapper",
+    "stdio",
+    "developer-tools"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "yaml": "^2.8.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.0"
+  }
+}

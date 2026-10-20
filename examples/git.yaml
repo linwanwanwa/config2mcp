@@ -1,0 +1,55 @@
+# cli2mcp example: a curated read-only window into git.
+# Deliberately exposes NO state-changing commands — the config is the policy.
+# Try it:  cli2mcp serve examples/git.yaml
+prefix: git
+
+tools:
+  - name: status
+    description: Show working tree status of a repository.
+    command: git
+    args: ["status", "--short"]
+    params:
+      - name: repoPath
+        flag: "-C"
+        placement: global
+        type: string
+        required: true
+        description: Absolute path to the git repository.
+    timeoutMs: 15000
+
+  - name: log
+    description: Show recent commit log with one line per commit.
+    command: git
+    args: ["log", "--oneline", "--no-decorate"]
+    params:
+      - name: repoPath
+        flag: "-C"
+        placement: global
+        type: string
+        required: true
+      - name: count
+        flag: "-n"
+        type: string
+        default: "20"
+        description: Number of commits to show.
+      - name: branch
+        positional: true
+        type: string
+        description: Optional branch or revision to inspect.
+    timeoutMs: 15000
+
+  - name: diff
+    description: Show the diff of a repository (working tree or between refs).
+    command: git
+    args: ["diff", "--stat"]
+    params:
+      - name: repoPath
+        flag: "-C"
+        placement: global
+        type: string
+        required: true
+      - name: ref
+        positional: true
+        type: string
+        description: e.g. HEAD~1 or main..feature.
+    timeoutMs: 15000

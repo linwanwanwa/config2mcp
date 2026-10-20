@@ -1,0 +1,72 @@
+# cli2mcp example: expose a few safe ffmpeg operations to agents.
+# Try it:  cli2mcp serve examples/ffmpeg.yaml
+prefix: ffmpeg
+
+tools:
+  - name: probe
+    description: >
+      Probe a media file and return streams, codecs, duration and bitrate
+      as JSON. Use this first before any conversion.
+    command: ffprobe
+    args: ["-v", "quiet", "-print_format", "json", "-show_format", "-show_streams"]
+    params:
+      - name: input
+        positional: true
+        type: string
+        required: true
+        description: Path or URL of the media file.
+    timeoutMs: 60000
+    jsonOutput: true
+
+  - name: convert
+    description: Convert a media file to another container/codec using ffmpeg.
+    command: ffmpeg
+    args: ["-y", "-hide_banner", "-loglevel", "error"]
+    params:
+      - name: input
+        flag: "-i"
+        type: string
+        required: true
+        description: Source file path.
+      - name: output
+        positional: true
+        type: string
+        required: true
+        description: Output file path; extension picks the format.
+      - name: videoBitrate
+        flag: "-b:v"
+        type: string
+        description: Target video bitrate, e.g. 1M or 500k.
+      - name: audioBitrate
+        flag: "-b:a"
+        type: string
+        description: Target audio bitrate, e.g. 128k.
+      - name: scale
+        flag: "-vf"
+        type: string
+        description: Video filter, e.g. "scale=1280:-2".
+      - name: noAudio
+        type: boolean
+        trueFlag: "-an"
+        description: Drop the audio track.
+    timeoutMs: 300000
+
+  - name: thumbnail
+    description: Grab a frame from a video as an image thumbnail.
+    command: ffmpeg
+    args: ["-y", "-hide_banner", "-loglevel", "error", "-frames:v", "1"]
+    params:
+      - name: input
+        flag: "-i"
+        type: string
+        required: true
+      - name: seek
+        flag: "-ss"
+        type: string
+        description: Timestamp to seek to, e.g. 00:01:30.
+      - name: output
+        positional: true
+        type: string
+        required: true
+        description: Output image path (.png or .jpg).
+    timeoutMs: 120000
