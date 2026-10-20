@@ -3,11 +3,12 @@
  * Builds both tsconfigs then runs node --test with an explicitly resolved
  * file list — no shell globbing, identical behavior on macOS/Linux/Windows.
  */
-import { readdir, stat } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-const root = path.resolve(import.meta.dirname, "..");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function run(cmd, args) {
   const r = spawnSync(cmd, args, { stdio: "inherit", cwd: root, shell: process.platform === "win32" });
