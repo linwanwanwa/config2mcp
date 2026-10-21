@@ -1,0 +1,15 @@
+# Built-in safe default: read-only file tools.
+# Override by running with an explicit config: config2mcp serve <your.yaml>
+prefix: files
+tools:
+  - name: list
+    description: List files in a directory (read-only).
+    command: ls
+    args: ["-la"]
+    params:
+      - name: dir
+        positional: true
+        type: string
+        required: true
+        description: Absolute directory path.
+    timeoutMs: 10000

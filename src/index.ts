@@ -8,6 +8,8 @@
  *   config2mcp inspect <config.yaml>    print the tools that would be exposed
  */
 import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import process from "node:process";
 import { parseConfig, ConfigError } from "./config.js";
 import { buildInputSchema } from "./schema.js";
@@ -45,12 +47,14 @@ function usage(): never {
 /** Candidates checked when running as a server with no explicit config. */
 function autoDiscoverConfig(): { path: string | null; config: ReturnType<typeof parseConfig> } {
   const env = process.env.CONFIG2MCP_CONFIG;
+  const builtin = path.join(path.dirname(fileURLToPath(import.meta.url)), "default-tools.yaml");
   const candidates = [
     ...(env ? [env] : []),
     "tools.yaml",
     "tools.yml",
     "config2mcp.yaml",
     "config2mcp.yml",
+    builtin,
   ];
   for (const p of candidates) {
     try {
@@ -81,8 +85,9 @@ async function main(): Promise<void> {
     const { path, config } = autoDiscoverConfig();
     if (!path) {
       console.error(
-        "config2mcp: no config found (looked at $CONFIG2MCP_CONFIG, ./tools.yaml, ./config2mcp.yaml). " +
-        "Serving zero tools. Pass a config file or set CONFIG2MCP_CONFIG.",
+        "config2mcp: no config found (looked at $CONFIG2MCP_CONFIG, ./tools.yaml, ./config2mcp.yaml); " +
+        "falling back to the built-in safe default (read-only file tools). " +
+        "Pass a config file or set CONFIG2MCP_CONFIG to customize.",
       );
     } else {
       console.error(`config2mcp: serving from ${path}`);

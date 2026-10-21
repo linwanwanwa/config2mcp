@@ -16,7 +16,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && cp src/default-tools.yaml dist/default-tools.yaml",
     "build:test": "tsc -p tsconfig.test.json",
     "test": "node scripts/run-tests.mjs",
     "prepack": "npm run build"
