@@ -1,0 +1,27 @@
+{
+  "manifest_version": "0.2",
+  "name": "config2mcp",
+  "version": "0.1.2",
+  "description": "Turn any CLI tool into an MCP server from one YAML config. Zero code, no shell injection, bounded execution. Runs bare (auto-discovers config) or with an explicit file.",
+  "author": {
+    "name": "linwanwanwa",
+    "url": "https://github.com/linwanwanwa"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {}
+    }
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/linwanwanwa/config2mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linwanwanwa/config2mcp"
+  }
+}

@@ -6,3 +6,4 @@ coverage/
 .env
 dist-test/
 .npm-cache/
+*.mcpb
