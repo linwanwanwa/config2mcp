@@ -1,0 +1,28 @@
+# Smithery configuration: https://smithery.ai/docs/config#smitheryyaml
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP server.
+    type: object
+    required: []
+    properties:
+      configPath:
+        type: string
+        description: >-
+          Optional path to a config2mcp YAML config file declaring which CLI
+          tools to expose. Leave empty to start with the built-in safe
+          default (a read-only files_list tool).
+  commandFunction: |-
+    (config) => {
+      const env = {};
+      if (config && config.configPath) {
+        env.CONFIG2MCP_CONFIG = config.configPath;
+      }
+      return {
+        command: 'npx',
+        args: ['-y', 'config2mcp@latest'],
+        env
+      };
+    }
+  exampleConfig:
+    configPath: ""
