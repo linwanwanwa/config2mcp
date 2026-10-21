@@ -83,7 +83,7 @@ export interface CreateServerOptions {
 /** Build an McpServer from a validated config. Exposed for tests. */
 export function createServer(cfg: Cli2McpConfig, opts: CreateServerOptions = {}): McpServer {
   const server = new McpServer(
-    { name: "config2mcp", version: "0.1.1" },
+    { name: "config2mcp", version: "0.1.2" },
     { capabilities: { tools: {} } },
   );
 
